@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Order - Order Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --warning-color: #f8961e;
+            --danger-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --border-radius: 10px;
+            --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .edit-container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .edit-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .back-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--light-color);
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .back-link:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(-3px);
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .order-id-badge {
+            margin-left: auto;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+        }
+
+        .card-title {
+            color: var(--dark-color);
+            margin-bottom: 25px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--primary-color);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .form-label .required {
+            color: var(--danger-color);
+        }
+
+        .form-input, .form-select {
+            padding: 12px 15px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: var(--transition);
+            background-color: #fff;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .form-input:disabled {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--gray-color);
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .status-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-confirmed { background: #d1ecf1; color: #0c5460; }
+        .status-shipped { background: #d1e7ff; color: #004085; }
+        .status-delivered { background: #d4edda; color: #155724; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+
+        .status-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .status-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .status-option input[type="radio"] {
+            display: none;
+        }
+
+        .status-option input[type="radio"]:checked + .status-content {
+            border-color: var(--primary-color);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .status-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 2px solid transparent;
+        }
+
+        .status-icon {
+            font-size: 20px;
+        }
+
+        .status-pending .status-icon { color: #f39c12; }
+        .status-confirmed .status-icon { color: #1abc9c; }
+        .status-shipped .status-icon { color: #3498db; }
+        .status-delivered .status-icon { color: #27ae60; }
+        .status-cancelled .status-icon { color: #e74c3c; }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: var(--dark-color);
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e11573;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .history-card {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .history-title {
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 15px;
+            transition: var(--transition);
+        }
+
+        .history-item:hover {
+            background: #f8f9fa;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .history-content {
+            flex: 1;
+        }
+
+        .history-action {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+
+        .history-details {
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+
+        .history-time {
+            font-size: 12px;
+            color: var(--gray-color);
+            white-space: nowrap;
+        }
+
+        .form-help {
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--gray-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .change-log {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .change-log.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .change-log-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .change-item {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .change-item::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #ffc107;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--box-shadow);
+            z-index: 1001;
+            transform: translateX(150%);
+            transition: transform 0.4s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #28a745;
+        }
+
+        .notification.error {
+            background: var(--danger-color);
+        }
+
+        .notification.warning {
+            background: var(--warning-color);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+                align-items: flex-start;
+            }
+
+            .edit-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .order-id-badge {
+                margin-left: 0;
+                align-self: flex-start;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .status-options {
+                flex-direction: column;
+            }
+
+            .status-option {
+                min-width: 100%;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .customer-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .customer-details h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .customer-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-container">
+        <!-- Header -->
+        <div class="edit-header">
+            <a href="/admin/OrderManagement" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="page-title">Edit Order</h1>
+            <div class="order-id-badge">
+                <i class="fas fa-hashtag"></i>
+                <%= order.order_id %>
+            </div>
+        </div>
+
+        <!-- Customer Information -->
+        <div class="customer-info">
+            <div class="customer-details">
+                <h3>Customer Information</h3>
+                <p>John Doe • john.doe@example.com • +1 (555) 123-4567</p>
+            </div>
+            <div class="customer-stats">
+                <div class="stat">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Total Orders</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">$2,850</div>
+                    <div class="stat-label">Total Spent</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <form action="/admin/order-update/<%= order.order_id %>" method="post" id="editOrderForm">
+            <div class="edit-card">
+                <h2 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    Order Details
+                </h2>
+
+                <!-- Change Log -->
+                <div class="change-log" id="changeLog">
+                    <div class="change-log-title">
+                        <i class="fas fa-history"></i>
+                        Changes Detected
+                    </div>
+                    <div id="changeLogContent"></div>
+                </div>
+
+                <!-- Order Information -->
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Order ID</span>
+                        <span class="info-value">#<%= order.order_id %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Created</span>
+                        <span class="info-value"><%= new Date(order.created_at || order.order_date).toLocaleDateString('en-US', { 
+                            year: 'numeric', 
+                            month: 'long', 
+                            day: 'numeric' 
+                        }) %></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Current Status</span>
+                        <span class="status-display status-<%= order.order_status.toLowerCase() %>">
+                            <i class="fas fa-circle"></i>
+                            <%= order.order_status %>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Form Fields -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="order_date">
+                            <i class="fas fa-calendar-alt"></i>
+                            Order Date <span class="required">*</span>
+                        </label>
+                        <input class="form-input" type="datetime-local" id="order_date" name="order_date"
+                               value="<%= order.order_date.toISOString().slice(0,16) %>" required>
+                        <div class="form-help">
+                            <i class="fas fa-info-circle"></i>
+                            Date and time when the order was placed
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="total_amount">
+                            <i class="fas fa-dollar-sign"></i>
+                            Total Amount <span class="required">*</span>
+                        </label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-color);">$</span>
+                            <input class="form-input" type="number" id="total_amount" name="total_amount" step="0.01"
+                                   value="<%= order.total_amount %>" required style="padding-left: 30px;">
+                        </div>
+                        <div class="form-help">
+                            <i class="fas fa-info-circle"></i>
+                            Total order amount including taxes and shipping
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Selection -->
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-tag"></i>
+                        Order Status <span class="required">*</span>
+                    </label>
+                    
+                    <div class="status-options">
+                        <label class="status-option status-pending">
+                            <input type="radio" name="order_status" value="Pending" <%= order.order_status=='Pending'?'checked':'' %>>
+                            <div class="status-content">
+                                <i class="fas fa-clock status-icon"></i>
+                                <span>Pending</span>
+                            </div>
+                        </label>
+                        
+                        <label class="status-option status-confirmed">
+                            <input type="radio" name="order_status" value="Confirmed" <%= order.order_status=='Confirmed'?'checked':'' %>>
+                            <div class="status-content">
+                                <i class="fas fa-check-circle status-icon"></i>
+                                <span>Confirmed</span>
+                            </div>
+                        </label>
+                        
+                        <label class="status-option status-shipped">
+                            <input type="radio" name="order_status" value="Shipped" <%= order.order_status=='Shipped'?'checked':'' %>>
+                            <div class="status-content">
+                                <i class="fas fa-shipping-fast status-icon"></i>
+                                <span>Shipped</span>
+                            </div>
+                        </label>
+                        
+                        <label class="status-option status-delivered">
+                            <input type="radio" name="order_status" value="Delivered" <%= order.order_status=='Delivered'?'checked':'' %>>
+                            <div class="status-content">
+                                <i class="fas fa-box-open status-icon"></i>
+                                <span>Delivered</span>
+                            </div>
+                        </label>
+                        
+                        <label class="status-option status-cancelled">
+                            <input type="radio" name="order_status" value="Cancelled" <%= order.order_status=='Cancelled'?'checked':'' %>>
+                            <div class="status-content">
+                                <i class="fas fa-times-circle status-icon"></i>
+                                <span>Cancelled</span>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="form-help">
+                        <i class="fas fa-info-circle"></i>
+                        Update the order status to track its progress
+                    </div>
+                </div>
+
+                <!-- Additional Fields -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="shipping_address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Shipping Address
+                        </label>
+                        <textarea class="form-input" id="shipping_address" name="shipping_address" rows="3" placeholder="Enter shipping address">123 Main St, New York, NY 10001</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="payment_method">
+                            <i class="fas fa-credit-card"></i>
+                            Payment Method
+                        </label>
+                        <select class="form-select" id="payment_method" name="payment_method">
+                            <option value="Credit Card" selected>Credit Card</option>
+                            <option value="PayPal">PayPal</option>
+                            <option value="Bank Transfer">Bank Transfer</option>
+                            <option value="Cash on Delivery">Cash on Delivery</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Update Order
+                    </button>
+                    
+                    <a href="/admin/OrderManagement" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                    
+                    <button type="button" class="btn btn-outline" id="previewBtn">
+                        <i class="fas fa-eye"></i>
+                        Preview Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Order History -->
+        <div class="history-card">
+            <h3 class="history-title">
+                <i class="fas fa-history"></i>
+                Order History
+            </h3>
+            
+            <ul class="history-list">
+                <li class="history-item">
+                    <div class="history-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="history-content">
+                        <div class="history-action">Order Created</div>
+                        <div class="history-details">Order was placed by customer</div>
+                    </div>
+                    <div class="history-time">
+                        <%= new Date(order.order_date).toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) %>
+                    </div>
+                </li>
+                
+                <li class="history-item">
+                    <div class="history-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="history-content">
+                        <div class="history-action">Status Updated</div>
+                        <div class="history-details">Changed from Pending to Confirmed</div>
+                    </div>
+                    <div class="history-time">Jan 12, 2024 • 14:30</div>
+                </li>
+                
+                <li class="history-item">
+                    <div class="history-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="history-content">
+                        <div class="history-action">Assigned to Manager</div>
+                        <div class="history-details">Order assigned to John Smith</div>
+                    </div>
+                    <div class="history-time">Jan 11, 2024 • 09:15</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Updating order...</p>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notificationText">Order updated successfully!</span>
+    </div>
+
+    <script>
+        // DOM Elements
+        const editOrderForm = document.getElementById('editOrderForm');
+        const changeLog = document.getElementById('changeLog');
+        const changeLogContent = document.getElementById('changeLogContent');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notificationText');
+        const previewBtn = document.getElementById('previewBtn');
+        
+        // Store original values
+        const originalValues = {
+            order_date: document.getElementById('order_date').value,
+            total_amount: document.getElementById('total_amount').value,
+            order_status: document.querySelector('input[name="order_status"]:checked').value,
+            shipping_address: document.getElementById('shipping_address').value,
+            payment_method: document.getElementById('payment_method').value
+        };
+
+        // Track changes
+        function checkForChanges() {
+            const currentValues = {
+                order_date: document.getElementById('order_date').value,
+                total_amount: document.getElementById('total_amount').value,
+                order_status: document.querySelector('input[name="order_status"]:checked')?.value || originalValues.order_status,
+                shipping_address: document.getElementById('shipping_address').value,
+                payment_method: document.getElementById('payment_method').value
+            };
+
+            const changes = [];
+            
+            if (currentValues.order_date !== originalValues.order_date) {
+                changes.push(`Order date changed from ${new Date(originalValues.order_date).toLocaleString()} to ${new Date(currentValues.order_date).toLocaleString()}`);
+            }
+            
+            if (parseFloat(currentValues.total_amount) !== parseFloat(originalValues.total_amount)) {
+                changes.push(`Total amount changed from $${parseFloat(originalValues.total_amount).toFixed(2)} to $${parseFloat(currentValues.total_amount).toFixed(2)}`);
+            }
+            
+            if (currentValues.order_status !== originalValues.order_status) {
+                changes.push(`Status changed from ${originalValues.order_status} to ${currentValues.order_status}`);
+            }
+            
+            if (currentValues.shipping_address !== originalValues.shipping_address) {
+                changes.push('Shipping address updated');
+            }
+            
+            if (currentValues.payment_method !== originalValues.payment_method) {
+                changes.push(`Payment method changed from ${originalValues.payment_method} to ${currentValues.payment_method}`);
+            }
+
+            if (changes.length > 0) {
+                changeLogContent.innerHTML = changes.map(change => `<div class="change-item">${change}</div>`).join('');
+                changeLog.classList.add('show');
+            } else {
+                changeLog.classList.remove('show');
+            }
+            
+            return changes.length > 0;
+        }
+
+        // Preview changes
+        previewBtn.addEventListener('click', () => {
+            if (checkForChanges()) {
+                showNotification('Review the changes highlighted above before saving.', 'warning');
+            } else {
+                showNotification('No changes detected.', 'warning');
+            }
+        });
+
+        // Form submission
+        editOrderForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (!checkForChanges()) {
+                if (!confirm('No changes were made. Do you want to continue?')) {
+                    return;
+                }
+            }
+            
+            // Show loading overlay
+            loadingOverlay.classList.add('active');
+            
+            // Simulate API call
+            setTimeout(() => {
+                loadingOverlay.classList.remove('active');
+                showNotification('Order updated successfully!', 'success');
+                
+                // In a real application, you would submit the form here
+                // editOrderForm.submit();
+                
+                // Redirect after success
+                setTimeout(() => {
+                    window.location.href = '/admin/OrderManagement';
+                }, 1500);
+            }, 1500);
+        });
+
+        // Show notification
+        function showNotification(message, type) {
+            notificationText.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Add change listeners to form inputs
+        const formInputs = editOrderForm.querySelectorAll('input, select, textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('change', checkForChanges);
+            input.addEventListener('input', checkForChanges);
+        });
+
+        // Initialize status radio buttons
+        const statusOptions = document.querySelectorAll('.status-option');
+        statusOptions.forEach(option => {
+            const radio = option.querySelector('input[type="radio"]');
+            const content = option.querySelector('.status-content');
+            
+            if (radio.checked) {
+                content.style.borderColor = getComputedStyle(option).getPropertyValue('--status-color');
+                content.style.background = 'rgba(67, 97, 238, 0.1)';
+            }
+            
+            option.addEventListener('click', () => {
+                statusOptions.forEach(opt => {
+                    opt.querySelector('.status-content').style.borderColor = 'transparent';
+                    opt.querySelector('.status-content').style.background = 'transparent';
+                });
+                
+                content.style.borderColor = getComputedStyle(option).getPropertyValue('--status-color');
+                content.style.background = 'rgba(67, 97, 238, 0.1)';
+                checkForChanges();
+            });
+        });
+
+        // Initialize with check for changes
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set CSS variables for status colors
+            document.querySelector('.status-pending').style.setProperty('--status-color', '#856404');
+            document.querySelector('.status-confirmed').style.setProperty('--status-color', '#0c5460');
+            document.querySelector('.status-shipped').style.setProperty('--status-color', '#004085');
+            document.querySelector('.status-delivered').style.setProperty('--status-color', '#155724');
+            document.querySelector('.status-cancelled').style.setProperty('--status-color', '#721c24');
+            
+            // Check if there are any initial changes
+            checkForChanges();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<%- include ("navbar.ejs") %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Contact Us | Premium Fashion Boutique</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===============================
+   BASIC RESET
+================================ */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background:#f9f5f0;
+    color:#333;
+    padding-top:90px; /* FIXED NAVBAR SPACE */
+}
+
+/* ===============================
+   CONTACT HERO
+================================ */
+.contact-hero{
+    position:relative;
+    width:100%;
+    min-height:320px;
+    display:flex;
+    align-items:center;
+    /* background:linear-gradient(135deg,#3f5efb,#8b5cf6); */
+    background-image: url('https://burst.shopifycdn.com/photos/contact-us-image.jpg?width=1000&format=pjpg&exif=0&iptc=0');
+    padding:120px 0 80px;
+}
+
+.contact-hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.25);
+}
+
+.contact-hero-content{
+    position:relative;
+    max-width:800px;
+    margin:auto;
+    text-align:center;
+    color:#fff;
+    padding:0 20px;
+}
+
+.contact-hero-content h1{
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.contact-hero-content p{
+    font-size:1.1rem;
+    opacity:0.9;
+}
+
+/* ===============================
+   CONTACT SECTION
+================================ */
+.contact-section{
+    padding:80px 0;
+}
+
+.contact-container{
+    max-width:1200px;
+    margin:auto;
+    padding:0 20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+}
+
+/* LEFT INFO */
+.contact-info{
+    background:#fff;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.contact-info h2{
+    margin-bottom:20px;
+    font-size:2rem;
+}
+
+.info-item{
+    margin-bottom:20px;
+}
+
+.info-item strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+/* RIGHT FORM */
+.contact-form{
+    background:#fff;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+}
+
+.contact-form h2{
+    margin-bottom:20px;
+}
+
+.contact-form input,
+.contact-form textarea{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
+    border:1px solid #ddd;
+    border-radius:6px;
+    font-size:15px;
+}
+
+.contact-form textarea{
+    resize:none;
+    height:130px;
+}
+
+.contact-form button{
+    background:#c19a6b;
+    color:#fff;
+    border:none;
+    padding:14px 30px;
+    border-radius:30px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.contact-form button:hover{
+    background:#8b7355;
+}
+
+/* ===============================
+   RESPONSIVE
+================================ */
+@media(max-width:768px){
+    .contact-container{
+        grid-template-columns:1fr;
+    }
+
+    .contact-hero-content h1{
+        font-size:2.2rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===============================
+     CONTACT HERO
+================================ -->
+<section class="contact-hero">
+    <div class="contact-hero-content">
+        <h1>Contact Us</h1>
+        <p>
+            We’re here to help and answer any questions you might have.
+            Reach out to us anytime.
+        </p>
+    </div>
+</section>
+
+<!-- ===============================
+     CONTACT CONTENT
+================================ -->
+<section class="contact-section">
+    <div class="contact-container">
+
+        <!-- LEFT -->
+        <div class="contact-info">
+            <h2>Get In Touch</h2>
+
+            <div class="info-item">
+                <strong>📍 Address</strong>
+                123 Fashion Street, Mumbai, India
+            </div>
+
+            <div class="info-item">
+                <strong>📞 Phone</strong>
+                +91 98765 43210
+            </div>
+
+            <div class="info-item">
+                <strong>✉ Email</strong>
+                support@boutique.com
+            </div>
+
+            <div class="info-item">
+                <strong>⏰ Business Hours</strong>
+                Mon – Sat : 10:00 AM – 7:00 PM
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="contact-form">
+            <h2>Send a Message</h2>
+
+            <form>
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <input type="text" placeholder="Phone Number">
+                <textarea placeholder="Your Message"></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>
+<%- include ("footer.ejs") %>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4a6fa5;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            color: #4a6fa5;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eaeaea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: #4a6fa5;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #4a6fa5;
+            box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.2);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: #4a6fa5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5a85;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #219653;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        thead {
+            background-color: #4a6fa5;
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.2s;
+        }
+
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        td {
+            padding: 15px;
+            color: #555;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+            font-size: 18px;
+        }
+
+        .no-data i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+
+        .customer-count {
+            background-color: #4a6fa5;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-group {
+                min-width: 100%;
+            }
+            
+            .card {
+                padding: 20px 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="page-title">
+                <i class="fas fa-users"></i>
+                <h1>Customer Management</h1>
+            </div>
+            <div class="customer-count">
+                <i class="fas fa-user-friends"></i>
+                <span>
+                    <% if(customers && customers.length > 0){ %>
+                        <%= customers.length %> Customer(s)
+                    <% } else { %>
+                        0 Customers
+                    <% } %>
+                </span>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-user-plus"></i>
+                <h2>Add New Customer</h2>
+            </div>
+            
+            <form action="/admin/customer_save" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customer_name" class="required">Customer Name</label>
+                        <input type="text" id="customer_name" name="customer_name" placeholder="Enter full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer_mobile" class="required">Mobile Number</label>
+                        <input type="tel" id="customer_mobile" name="customer_mobile" placeholder="Enter mobile number" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="customer_email">Email Address</label>
+                        <input type="email" id="customer_email" name="customer_email" placeholder="Enter email address">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer_address">Address</label>
+                        <textarea id="customer_address" name="customer_address" rows="2" placeholder="Enter customer address"></textarea>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 25px;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Customer
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Clear Form
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-list"></i>
+                <h2>Customer List</h2>
+            </div>
+            
+            <div class="table-container">
+                <% if(customers && customers.length > 0){ %>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Mobile</th>
+                                <th>Email</th>
+                                <th>Address</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% customers.forEach(function(c){ %>
+                                <tr>
+                                    <td><strong>#<%= c.customer_id %></strong></td>
+                                    <td>
+                                        <div style="display: flex; align-items: center; gap: 10px;">
+                                            <div style="width: 36px; height: 36px; background-color: #4a6fa5; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                                <%= c.customer_name.charAt(0).toUpperCase() %>
+                                            </div>
+                                            <%= c.customer_name %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a href="tel:<%= c.customer_mobile %>" style="color: #4a6fa5; text-decoration: none;">
+                                            <i class="fas fa-phone-alt" style="margin-right: 5px;"></i>
+                                            <%= c.customer_mobile %>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <% if(c.customer_email){ %>
+                                            <a href="mailto:<%= c.customer_email %>" style="color: #4a6fa5; text-decoration: none;">
+                                                <i class="fas fa-envelope" style="margin-right: 5px;"></i>
+                                                <%= c.customer_email %>
+                                            </a>
+                                        <% } else { %>
+                                            <span style="color: #999;">-</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if(c.customer_address){ %>
+                                            <div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;">
+                                                <%= c.customer_address %>
+                                            </div>
+                                        <% } else { %>
+                                            <span style="color: #999;">-</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="/admin/customer-edit/<%= c.customer_id %>" class="btn btn-success btn-sm">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a href="/admin/customer-delete/<%= c.customer_id %>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this customer?');">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <div class="no-data">
+                        <i class="fas fa-user-slash"></i>
+                        <h3>No Customers Found</h3>
+                        <p>Add your first customer using the form above.</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add form validation and interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile number formatting
+            const mobileInput = document.getElementById('customer_mobile');
+            if(mobileInput) {
+                mobileInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if(value.length > 10) value = value.substring(0, 10);
+                    e.target.value = value;
+                });
+            }
+            
+            // Add confirm dialog for delete links
+            const deleteLinks = document.querySelectorAll('a[href*="customer-delete"]');
+            deleteLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if(!confirm('Are you sure you want to delete this customer?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+            
+            // Highlight required fields on form submit
+            const form = document.querySelector('form');
+            if(form) {
+                form.addEventListener('submit', function(e) {
+                    const requiredFields = form.querySelectorAll('[required]');
+                    let isValid = true;
+                    
+                    requiredFields.forEach(field => {
+                        if(!field.value.trim()) {
+                            field.style.borderColor = '#e74c3c';
+                            isValid = false;
+                        } else {
+                            field.style.borderColor = '#ddd';
+                        }
+                    });
+                    
+                    if(!isValid) {
+                        e.preventDefault();
+                        alert('Please fill in all required fields marked with *');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
