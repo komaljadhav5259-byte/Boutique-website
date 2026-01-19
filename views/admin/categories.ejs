@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e1e5eb;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h1 i {
+            color: #3498db;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title i {
+            color: #3498db;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-success {
+            background-color: #2ecc71;
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+        }
+        
+        thead {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        th {
+            padding: 16px 15px;
+            text-align: left;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color 0.2s;
+        }
+        
+        tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        td {
+            padding: 16px 15px;
+            color: #555;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background-color: #d5f4e6;
+            color: #27ae60;
+        }
+        
+        .status-inactive {
+            background-color: #fdebd0;
+            color: #e67e22;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .edit-btn {
+            background-color: #f1c40f;
+            color: #2c3e50;
+        }
+        
+        .edit-btn:hover {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #bdc3c7;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-end;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+            }
+        }
+        
+        .success-message {
+            background-color: #d5f4e6;
+            color: #27ae60;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .error-message {
+            background-color: #fdebd0;
+            color: #e67e22;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-tags"></i> Category Management</h1>
+        </header>
+        
+        <!-- Add Category Form -->
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-plus-circle"></i> Add New Category</h2>
+            
+            <!-- Success/Error Message Placeholder (You can add conditional display logic) -->
+            <!-- 
+            <div class="success-message">
+                <i class="fas fa-check-circle"></i> Category added successfully!
+            </div>
+            -->
+            
+            <form action="/admin/category_save" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="category_name">Category Name</label>
+                        <input type="text" id="category_name" name="category_name" placeholder="Enter category name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="category_status">Status</label>
+                        <select id="category_status" name="category_status">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Category
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Category List -->
+        <div class="card">
+            <h2 class="card-title"><i class="fas fa-list"></i> Category List</h2>
+            
+            <div class="table-container">
+                <% if (categories.length > 0) { %>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% categories.forEach(function(cat, i){ %>
+                                <tr>
+                                    <td><strong><%= i + 1 %></strong></td>
+                                    <td><%= cat.category_name %></td>
+                                    <td>
+                                        <span class="status <%= cat.category_status === 'Active' ? 'status-active' : 'status-inactive' %>">
+                                            <i class="fas <%= cat.category_status === 'Active' ? 'fa-check-circle' : 'fa-pause-circle' %>"></i>
+                                            <%= cat.category_status %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="actions">
+                                            <a href="/admin/category_edit/<%= cat.category_id %>" class="action-btn edit-btn">
+                                                <i class="fas fa-edit"></i> Edit
+                                            </a>
+                                            <a href="/admin/delete_category/<%= cat.category_id %>" class="action-btn delete-btn" onclick="return confirm('Are you sure you want to delete this category?');">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                <% } else { %>
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No Categories Found</h3>
+                        <p>Add your first category using the form above.</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add a simple confirmation for delete links
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteLinks = document.querySelectorAll('.delete-btn');
+            deleteLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (!confirm('Are you sure you want to delete this category?')) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

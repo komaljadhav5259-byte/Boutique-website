@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Category - Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 40px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        label i {
+            color: #3498db;
+            width: 20px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background-color: #f8fafc;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            background-color: white;
+        }
+
+        input[readonly] {
+            background-color: #f1f5f9;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex: 1;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2980b9, #2573a7);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #495057;
+            border: 2px solid #e0e6ed;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+            border-color: #ced4da;
+            transform: translateY(-3px);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s;
+            padding: 10px 20px;
+            border-radius: 6px;
+            background-color: #f8fafc;
+        }
+
+        .back-link:hover {
+            background-color: #e3f2fd;
+            padding-left: 15px;
+            padding-right: 25px;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+
+        .status-active {
+            background-color: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .status-inactive {
+            background-color: #fde8e8;
+            color: #e74c3c;
+        }
+
+        .form-hint {
+            display: block;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .current-info {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #3498db;
+        }
+
+        .current-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+
+        .current-info p {
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .category-id {
+            font-family: monospace;
+            background-color: #2c3e50;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 25px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            input, select {
+                padding: 12px 15px;
+            }
+            
+            .btn {
+                padding: 12px 20px;
+            }
+        }
+
+        /* Animation for page load */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card, .header {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-edit"></i>
+                Edit Category
+            </h1>
+            <p>Update category information and status</p>
+        </div>
+
+        <div class="card">
+            <!-- Current Category Information -->
+            <div class="current-info">
+                <h3><i class="fas fa-info-circle"></i> Editing Category</h3>
+                <p><strong>Category ID:</strong> <span class="category-id"><%= category.category_id %></span></p>
+                <p><strong>Current Name:</strong> <%= category.category_name %></p>
+                <p><strong>Current Status:</strong> 
+                    <% if (category.category_status === 'active') { %>
+                        <span class="status-indicator status-active">
+                            <i class="fas fa-check-circle"></i> Active
+                        </span>
+                    <% } else { %>
+                        <span class="status-indicator status-inactive">
+                            <i class="fas fa-times-circle"></i> Inactive
+                        </span>
+                    <% } %>
+                </p>
+            </div>
+            <!-- Edit Category Form -->
+            <form action="/admin/category_update/<%= category.category_id %>" method="post" id="editCategoryForm">
+                <div class="form-group">
+                    <label for="category_name">
+                        <i class="fas fa-tag"></i> Category Name
+                    </label>
+                    <input 
+                        type="text" 
+                        id="category_name" 
+                        name="category_name" 
+                        value="<%= category.category_name %>" 
+                        required
+                        placeholder="Enter category name"
+                        autofocus
+                    >
+                    <span class="form-hint">Enter a descriptive name for your category</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="category_status">
+                        <i class="fas fa-toggle-on"></i> Category Status
+                    </label>
+                    <select id="category_status" name="category_status" required>
+                        <option value="active" <%= category.category_status === 'active' ? 'selected' : '' %>>Active</option>
+                        <option value="inactive" <%= category.category_status === 'inactive' ? 'selected' : '' %>>Inactive</option>
+                    </select>
+                    <span class="form-hint">Active categories will be visible to users</span>
+                </div>
+
+                <!-- Form Action Buttons -->
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Update Category
+                    </button>
+                    
+                    <a href="/admin/category-management" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                    
+                    <button type="button" class="btn btn-danger" id="deleteBtn">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <a href="/admin/category-management" class="back-link">
+            <i class="fas fa-arrow-left"></i> Back to Category List
+        </a>
+    </div>
+
+    <script>
+        // Form validation and enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('editCategoryForm');
+            const deleteBtn = document.getElementById('deleteBtn');
+            const categoryNameInput = document.getElementById('category_name');
+            const categoryStatusSelect = document.getElementById('category_status');
+            
+            // Add visual feedback for status selection
+            function updateStatusIndicator() {
+                const selectedOption = categoryStatusSelect.options[categoryStatusSelect.selectedIndex];
+                const statusValue = selectedOption.value;
+                const statusText = selectedOption.text;
+                
+                // Remove any existing indicator if present
+                const existingIndicator = document.querySelector('.status-indicator-dynamic');
+                if (existingIndicator) {
+                    existingIndicator.remove();
+                }
+                
+                // Create and insert new indicator
+                const indicator = document.createElement('span');
+                indicator.className = `status-indicator status-${statusValue} status-indicator-dynamic`;
+                indicator.innerHTML = `<i class="fas fa-${statusValue === 'active' ? 'check' : 'times'}-circle"></i> ${statusText}`;
+                
+                // Insert after the select element
+                categoryStatusSelect.parentNode.insertBefore(indicator, categoryStatusSelect.nextSibling);
+            }
+            
+            // Initialize status indicator
+            updateStatusIndicator();
+            
+            // Update indicator when status changes
+            categoryStatusSelect.addEventListener('change', updateStatusIndicator);
+            
+            // Form submission handler
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Basic validation
+                if (!categoryNameInput.value.trim()) {
+                    alert('Please enter a category name');
+                    categoryNameInput.focus();
+                    return;
+                }
+                
+                // Show confirmation before submitting
+                if (confirm('Are you sure you want to update this category?')) {
+                    // In a real app, you might want to show a loading indicator here
+                    console.log('Updating category:', {
+                        name: categoryNameInput.value,
+                        status: categoryStatusSelect.value
+                    });
+                    
+                    // Submit the form
+                    this.submit();
+                }
+            });
+            
+            // Delete button handler
+            deleteBtn.addEventListener('click', function() {
+                if (confirm('WARNING: This will permanently delete this category. Are you sure you want to proceed?')) {
+                    // Redirect to delete endpoint
+                    window.location.href = `/admin/delete_category/<%= category.category_id %>`;
+                }
+            });
+            
+            // Add character counter for category name
+            const charCounter = document.createElement('div');
+            charCounter.className = 'char-counter';
+            charCounter.style.cssText = 'text-align: right; font-size: 14px; color: #7f8c8d; margin-top: 5px;';
+            charCounter.textContent = `${categoryNameInput.value.length}/50 characters`;
+            categoryNameInput.parentNode.appendChild(charCounter);
+            
+            categoryNameInput.addEventListener('input', function() {
+                const length = this.value.length;
+                charCounter.textContent = `${length}/50 characters`;
+                
+                // Change color if approaching limit
+                if (length > 40) {
+                    charCounter.style.color = '#e74c3c';
+                } else if (length > 30) {
+                    charCounter.style.color = '#f39c12';
+                } else {
+                    charCounter.style.color = '#7f8c8d';
+                }
+            });
+            
+            // Add visual feedback when form is being interacted with
+            const formInputs = form.querySelectorAll('input, select');
+            formInputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.01)';
+                    this.parentElement.style.transition = 'transform 0.2s';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

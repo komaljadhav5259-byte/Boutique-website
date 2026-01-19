@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .container {
+            margin-top: 30px;
+            margin-bottom: 50px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            margin-bottom: 30px;
+        }
+        .card-header {
+            background-color: #4a6baf;
+            color: white;
+            font-weight: 600;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        .form-control, .form-select {
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            padding: 10px 12px;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #4a6baf;
+            box-shadow: 0 0 0 0.25rem rgba(74, 107, 175, 0.25);
+        }
+        .btn-primary {
+            background-color: #4a6baf;
+            border-color: #4a6baf;
+            padding: 10px 25px;
+            font-weight: 500;
+            border-radius: 6px;
+        }
+        .btn-primary:hover {
+            background-color: #3a5a9f;
+            border-color: #3a5a9f;
+        }
+        .btn-success {
+            padding: 8px 20px;
+            border-radius: 6px;
+        }
+        .btn-danger {
+            padding: 8px 20px;
+            border-radius: 6px;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        .table {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .table thead {
+            background-color: #4a6baf;
+            color: white;
+        }
+        .table th {
+            font-weight: 600;
+            padding: 15px 12px;
+            border: none;
+        }
+        .table td {
+            padding: 12px;
+            vertical-align: middle;
+            border-color: #f1f3f4;
+        }
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .no-products {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+        .action-links a {
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        .action-links a:hover {
+            text-decoration: underline;
+        }
+        .btn-edit {
+            color: #0d6efd;
+        }
+        .btn-delete {
+            color: #dc3545;
+        }
+        .section-title {
+            color: #343a40;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .price {
+            font-weight: 600;
+            color: #28a745;
+        }
+        .product-image-placeholder {
+            width: 50px;
+            height: 50px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+        hr {
+            opacity: 0.2;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h3 fw-bold text-primary">Product Management</h1>
+            <div>
+                <span class="badge bg-secondary">Total Products: <%= products ? products.length : 0 %></span>
+            </div>
+        </div>
+
+        <!-- Add New Product Form -->
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <i class="fas fa-plus-circle me-2"></i>
+                Add New Product
+            </div>
+            <div class="card-body">
+                <form action="/admin/product_save" method="post" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="productName" class="form-label">Product Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="productName" name="product_name" required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="productPrice" class="form-label">Price (₹) <span class="text-danger">*</span></label>
+                        <input type="number" step="0.01" class="form-control" id="productPrice" name="product_price" required>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="productDiscount" class="form-label">Discount (%)</label>
+                        <input type="number" class="form-control" id="productDiscount" name="product_discount" min="0" max="100">
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="productColor" class="form-label">Color</label>
+                        <input type="text" class="form-control" id="productColor" name="product_color">
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="productSize" class="form-label">Size</label>
+                        <input type="text" class="form-control" id="productSize" name="product_size">
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="productCategory" class="form-label">Category</label>
+                        <input type="text" class="form-control" id="productCategory" name="product_catrgory">
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="productDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="productDescription" name="description" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <label for="productStatus" class="form-label">Status</label>
+                        <select class="form-select" id="productStatus" name="status">
+                            <option value="1">Active</option>
+                            <option value="0">Inactive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-12 mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Save Product
+                        </button>
+                        <button type="reset" class="btn btn-outline-secondary ms-2">
+                            <i class="fas fa-redo me-2"></i>Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Product List -->
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <i class="fas fa-list me-2"></i>
+                Product List
+            </div>
+            <div class="card-body p-0">
+                <div class="table-container">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Discount</th>
+                                <th>Color</th>
+                                <th>Size</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (products && products.length > 0) { %>
+                                <% products.forEach(function(p) { %>
+                                    <tr>
+                                        <td><strong>#<%= p.product_id %></strong></td>
+                                        <td><%= p.product_name %></td>
+                                        <td class="price">₹ <%= p.product_price %></td>
+                                        <td>
+                                            <% if (p.product_discount && p.product_discount > 0) { %>
+                                                <span class="badge bg-warning text-dark"><%= p.product_discount %>% OFF</span>
+                                            <% } else { %>
+                                                <span class="text-muted">-</span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (p.product_color) { %>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="color-dot me-2" style="width: 15px; height: 15px; background-color: <%= p.product_color.toLowerCase() %>; border-radius: 50%; border: 1px solid #ddd;"></div>
+                                                    <%= p.product_color %>
+                                                </div>
+                                            <% } else { %>
+                                                <span class="text-muted">-</span>
+                                            <% } %>
+                                        </td>
+                                        <td><%= p.product_size || '-' %></td>
+                                        <td>
+                                            <% if (p.product_catrgory) { %>
+                                                <span class="badge bg-info text-dark"><%= p.product_catrgory %></span>
+                                            <% } else { %>
+                                                <span class="text-muted">-</span>
+                                            <% } %>
+                                        </td>
+                                        <td>
+                                            <% if (p.status == 1) { %>
+                                                <span class="status-badge status-active">Active</span>
+                                            <% } else { %>
+                                                <span class="status-badge status-inactive">Inactive</span>
+                                            <% } %> 
+                                        </td>
+                                        <td class="action-links">
+                                            <a href="/admin/product-edit/<%= p.product_id %>" class="btn-edit" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="/admin/delete_product/<%= p.product_id %>" 
+                                               class="btn-delete" 
+                                               title="Delete"
+                                               onclick="return confirm('Are you sure you want to delete this product?')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="9" class="no-products">
+                                        <i class="fas fa-box-open fa-2x mb-3" style="color: #dee2e6;"></i>
+                                        <p class="mb-0">No products found. Add your first product above.</p>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple form validation enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            
+            form.addEventListener('submit', function(event) {
+                const productName = document.getElementById('productName').value.trim();
+                const productPrice = document.getElementById('productPrice').value;
+                
+                if (!productName) {
+                    alert('Product name is required!');
+                    event.preventDefault();
+                    return false;
+                }
+                
+                if (!productPrice || parseFloat(productPrice) <= 0) {
+                    alert('Please enter a valid price greater than 0!');
+                    event.preventDefault();
+                    return false;
+                }
+                
+                // Optional: Validate discount range
+                const discount = document.getElementById('productDiscount').value;
+                if (discount && (parseInt(discount) < 0 || parseInt(discount) > 100)) {
+                    alert('Discount must be between 0 and 100 percent!');
+                    event.preventDefault();
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Add color picker functionality if needed
+            const colorInput = document.getElementById('productColor');
+            colorInput.addEventListener('focus', function() {
+                this.type = 'color';
+            });
+            
+            colorInput.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.type = 'text';
+                }
+            });
+            
+            // Reset form button functionality
+            const resetButton = document.querySelector('button[type="reset"]');
+            resetButton.addEventListener('click', function() {
+                document.getElementById('productStatus').value = '1';
+            });
+        });
+    </script>
+</body>
+</html>

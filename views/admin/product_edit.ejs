@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header h1 i {
+            font-size: 32px;
+        }
+
+        .product-id {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 8px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2d3748;
+            font-size: 15px;
+        }
+
+        label.required::after {
+            content: " *";
+            color: #e53e3e;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #4299e1;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: "▼";
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #718096;
+            pointer-events: none;
+            font-size: 12px;
+        }
+
+        select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .status-active {
+            background-color: #c6f6d5;
+            color: #22543d;
+        }
+
+        .status-inactive {
+            background-color: #fed7d7;
+            color: #742a2a;
+        }
+
+        .status-badge i {
+            font-size: 12px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 117, 252, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #475569;
+            border: 2px solid #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+
+        .form-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .last-updated {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .last-updated i {
+            font-size: 16px;
+        }
+
+        .price-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .price-display .currency {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .price-display input {
+            flex: 1;
+        }
+
+        .discount-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .discount-display .percent {
+            font-size: 16px;
+            color: #718096;
+        }
+
+        .discount-display input {
+            flex: 1;
+        }
+
+        .form-section {
+            margin-bottom: 32px;
+        }
+
+        .form-section h3 {
+            font-size: 18px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-section h3 i {
+            color: #4299e1;
+        }
+
+        .thumbnail-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            border: 2px dashed #cbd5e1;
+            color: #94a3b8;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .thumbnail-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            font-size: 14px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .error-message.hidden {
+            display: none;
+        }
+
+        input.error {
+            border-color: #e53e3e;
+            background: #fff5f5;
+        }
+
+        /* Loading overlay for form submission */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #e2e8f0;
+            border-top-color: #4299e1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-edit"></i>
+                Edit Product
+            </h1>
+            <div class="product-id">
+                <i class="fas fa-hashtag"></i>
+                Product ID: <%= product.product_id %>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <form id="editProductForm" action="/admin/product-update/<%= product.product_id %>" method="post">
+                <div class="form-section">
+                    <h3><i class="fas fa-info-circle"></i> Basic Information</h3>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="required">Product Name</label>
+                            <input type="text" 
+                                   name="product_name" 
+                                   value="<%= product.product_name %>" 
+                                   required
+                                   placeholder="Enter product name">
+                            <div class="error-message hidden" id="name-error">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Product name is required
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="required">Price</label>
+                            <div class="price-display">
+                                <span class="currency">₹</span>
+                                <input type="number" 
+                                       step="0.01" 
+                                       name="product_price" 
+                                       value="<%= product.product_price %>" 
+                                       required
+                                       placeholder="0.00"
+                                       min="0">
+                            </div>
+                            <div class="error-message hidden" id="price-error">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Price must be greater than 0
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Discount</label>
+                            <div class="discount-display">
+                                <input type="number" 
+                                       name="product_discount" 
+                                       value="<%= product.product_discount %>"
+                                       placeholder="0"
+                                       min="0"
+                                       max="100">
+                                <span class="percent">%</span>
+                            </div>
+                            <div class="error-message hidden" id="discount-error">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Discount must be between 0 and 100
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-tags"></i> Product Details</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Color</label>
+                            <input type="text" 
+                                   name="product_color" 
+                                   value="<%= product.product_color %>"
+                                   placeholder="e.g., Red, Blue, Black">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Size</label>
+                            <input type="text" 
+                                   name="product_size" 
+                                   value="<%= product.product_size %>"
+                                   placeholder="e.g., S, M, L, XL">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Category</label>
+                            <input type="text" 
+                                   name="product_catrgory" 
+                                   value="<%= product.product_catrgory %>"
+                                   placeholder="Enter category">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Status</label>
+                            <div class="select-wrapper">
+                                <select name="status">
+                                    <option value="1" <%= product.status==1?'selected':'' %>>Active</option>
+                                    <option value="0" <%= product.status==0?'selected':'' %>>Inactive</option>
+                                </select>
+                            </div>
+                            <div class="status-badge <%= product.status==1?'status-active':'status-inactive' %>">
+                                <i class="fas <%= product.status==1?'fa-check-circle':'fa-times-circle' %>"></i>
+                                <%= product.status==1?'Active':'Inactive' %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3><i class="fas fa-align-left"></i> Description</h3>
+                    <div class="form-group">
+                        <textarea name="description" 
+                                  placeholder="Enter product description..."><%= product.description %></textarea>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Update Product
+                    </button>
+                    <a href="/admin/ProductManagement" class="btn btn-secondary">
+                        <i class="fas fa-times"></i>
+                        Cancel
+                    </a>
+                </div>
+
+                <div class="form-footer">
+                    <div class="last-updated">
+                        <i class="far fa-clock"></i>
+                        Last updated: <%= new Date().toLocaleDateString() %>
+                    </div>
+                    <div>
+                        <i class="fas fa-shield-alt"></i>
+                        Changes saved securely
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Saving changes...</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('editProductForm');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            
+            // Real-time validation
+            const priceInput = form.querySelector('input[name="product_price"]');
+            const discountInput = form.querySelector('input[name="product_discount"]');
+            const nameInput = form.querySelector('input[name="product_name"]');
+            
+            // Validate price
+            priceInput.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                const errorElement = document.getElementById('price-error');
+                
+                if (isNaN(value) || value <= 0) {
+                    this.classList.add('error');
+                    errorElement.classList.remove('hidden');
+                } else {
+                    this.classList.remove('error');
+                    errorElement.classList.add('hidden');
+                }
+            });
+            
+            // Validate discount
+            discountInput.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                const errorElement = document.getElementById('discount-error');
+                
+                if (this.value && (isNaN(value) || value < 0 || value > 100)) {
+                    this.classList.add('error');
+                    errorElement.classList.remove('hidden');
+                } else {
+                    this.classList.remove('error');
+                    errorElement.classList.add('hidden');
+                }
+            });
+            
+            // Validate name
+            nameInput.addEventListener('input', function() {
+                const errorElement = document.getElementById('name-error');
+                
+                if (this.value.trim() === '') {
+                    this.classList.add('error');
+                    errorElement.classList.remove('hidden');
+                } else {
+                    this.classList.remove('error');
+                    errorElement.classList.add('hidden');
+                }
+            });
+            
+            // Status select change
+            const statusSelect = form.querySelector('select[name="status"]');
+            const statusBadge = form.querySelector('.status-badge');
+            
+            statusSelect.addEventListener('change', function() {
+                const isActive = this.value === '1';
+                statusBadge.className = 'status-badge ' + (isActive ? 'status-active' : 'status-inactive');
+                statusBadge.innerHTML = `
+                    <i class="fas ${isActive ? 'fa-check-circle' : 'fa-times-circle'}"></i>
+                    ${isActive ? 'Active' : 'Inactive'}
+                `;
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate form
+                let isValid = true;
+                
+                if (nameInput.value.trim() === '') {
+                    nameInput.classList.add('error');
+                    document.getElementById('name-error').classList.remove('hidden');
+                    isValid = false;
+                }
+                
+                const priceValue = parseFloat(priceInput.value);
+                if (isNaN(priceValue) || priceValue <= 0) {
+                    priceInput.classList.add('error');
+                    document.getElementById('price-error').classList.remove('hidden');
+                    isValid = false;
+                }
+                
+                if (!isValid) {
+                    // Scroll to first error
+                    const firstError = form.querySelector('.error');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    return;
+                }
+                
+                // Show loading overlay
+                loadingOverlay.classList.add('active');
+                
+                // Submit form after a short delay to show loading state
+                setTimeout(() => {
+                    form.submit();
+                }, 1000);
+            });
+            
+            // Calculate final price with discount
+            function calculateFinalPrice() {
+                const price = parseFloat(priceInput.value) || 0;
+                const discount = parseFloat(discountInput.value) || 0;
+                
+                if (price > 0 && discount > 0) {
+                    const finalPrice = price - (price * discount / 100);
+                    // You could display this somewhere if needed
+                }
+            }
+            
+            priceInput.addEventListener('input', calculateFinalPrice);
+            discountInput.addEventListener('input', calculateFinalPrice);
+            
+            // Initialize calculations
+            calculateFinalPrice();
+            
+            // Auto-resize textarea
+            const textarea = form.querySelector('textarea');
+            textarea.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Trigger initial resize
+            setTimeout(() => {
+                textarea.style.height = 'auto';
+                textarea.style.height = (textarea.scrollHeight) + 'px';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

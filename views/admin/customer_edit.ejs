@@ -1,0 +1,216 @@
+<div class="customer-edit-container">
+    <h2 class="page-title">Edit Customer</h2>
+    
+    <form action="/admin/customer-update/<%= customer.customer_id %>" method="post" class="customer-form">
+        
+        <div class="form-group">
+            <label for="customer_name" class="form-label">Customer Name *</label>
+            <input type="text" 
+                   id="customer_name" 
+                   name="customer_name"
+                   value="<%= customer.customer_name %>" 
+                   class="form-input"
+                   required
+                   aria-required="true"
+                   placeholder="Enter customer name">
+        </div>
+        
+        <div class="form-group">
+            <label for="customer_mobile" class="form-label">Mobile Number *</label>
+            <input type="tel" 
+                   id="customer_mobile" 
+                   name="customer_mobile"
+                   value="<%= customer.customer_mobile %>" 
+                   class="form-input"
+                   required
+                   aria-required="true"
+                   pattern="[0-9]{10}"
+                   placeholder="Enter 10-digit mobile number">
+            <small class="form-hint">10 digits without spaces or special characters</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="customer_email" class="form-label">Email Address</label>
+            <input type="email" 
+                   id="customer_email" 
+                   name="customer_email"
+                   value="<%= customer.customer_email %>" 
+                   class="form-input"
+                   placeholder="customer@example.com"
+                   aria-describedby="emailHelp">
+            <small id="emailHelp" class="form-hint">Optional - for sending notifications</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="customer_address" class="form-label">Address</label>
+            <textarea id="customer_address" 
+                      name="customer_address" 
+                      rows="4" 
+                      class="form-textarea"
+                      placeholder="Enter customer address"><%= customer.customer_address %></textarea>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="icon" viewBox="0 0 16 16">
+                    <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293L6.354 8.854a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L10.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 0 0-1H2z"/>
+                </svg>
+                Update Customer
+            </button>
+            <a href="/admin/CustomerManagement" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .customer-edit-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .page-title {
+        color: #2d3748;
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin-bottom: 2rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 2px solid #e2e8f0;
+    }
+    
+    .customer-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #4a5568;
+        font-size: 0.95rem;
+    }
+    
+    .form-label[required]::after {
+        content: " *";
+        color: #e53e3e;
+    }
+    
+    .form-input, .form-textarea {
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        background-color: #f8fafc;
+    }
+    
+    .form-input:focus, .form-textarea:focus {
+        outline: none;
+        border-color: #4299e1;
+        background-color: white;
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+    }
+    
+    .form-input:hover, .form-textarea:hover {
+        border-color: #cbd5e0;
+    }
+    
+    .form-hint {
+        color: #718096;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e2e8f0;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+        border: none;
+    }
+    
+    .btn-primary {
+        background-color: #4299e1;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3182ce;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(66, 153, 225, 0.2);
+    }
+    
+    .btn-secondary {
+        background-color: #e2e8f0;
+        color: #4a5568;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #cbd5e0;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .icon {
+        margin-right: 0.25rem;
+    }
+    
+    .form-textarea {
+        resize: vertical;
+        min-height: 100px;
+        font-family: inherit;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 640px) {
+        .customer-edit-container {
+            margin: 1rem;
+            padding: 1.5rem;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+    
+    /* Accessibility improvements */
+    .form-input:invalid, .form-textarea:invalid {
+        border-color: #fc8181;
+    }
+    
+    .btn:focus-visible {
+        outline: 2px solid #4299e1;
+        outline-offset: 2px;
+    }
+</style>
