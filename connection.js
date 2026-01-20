@@ -2,10 +2,10 @@ var mysql = require("mysql");
 var util = require("util");
 
 var conn = mysql.createConnection({
-    host: "blwkncl5qtrxudus3obt-mysql.services.clever-cloud.com",
-    user: "ubz56qok9icxw5mf",
-    password: "jnDNiubNCtU7ZxpIgRgP",
-    database: "blwkncl5qtrxudus3obt"
+    host: "bhd3cwuw3v3bm590pylw-mysql.services.clever-cloud.com",
+    user: "upsgdteqbtwvfmrj",
+    password: "lU39qnJFdQnh7EPB8lpV",
+    database: "bhd3cwuw3v3bm590pylw"
 });
 
 var exe = util.promisify(conn.query).bind(conn);
