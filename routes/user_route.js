@@ -11,7 +11,7 @@ route.get("/about", function (req, res) {
 });
 
 route.get("/contact", function (req, res) {
-    res.render("user/contact.ejs");
+    res.render("user/Contact.ejs");
 });
 
 route.get("/shop", function (req, res) {
